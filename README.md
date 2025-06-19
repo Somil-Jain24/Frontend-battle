@@ -1,8 +1,3 @@
-Great! Here's your updated `README.md` file with the **live deployed link** (`https://frontend-battl.netlify.app/`) added and properly formatted:
-
----
-
-```markdown
 # ⚔️ Frontend Battle
 
 Welcome to **Frontend Battle**, a dynamic frontend playground crafted using **TypeScript**, **JavaScript**, and modern UI techniques. This project showcases hands-on implementation of advanced frontend features, ideal for both learning and demonstration purposes.
