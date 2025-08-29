@@ -2,12 +2,79 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Premium Futuristic Multi-Page Website</title>
-  </head>
+ 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+    // Make all buttons and button-like elements workable and keyboard accessible
+    document.addEventListener('DOMContentLoaded', () => {
+      // Ensure native <button> elements aren't accidental form submitters
+      document.querySelectorAll('button').forEach(btn => {
+        if (!btn.hasAttribute('type')) btn.setAttribute('type', 'button');
+      });
+
+      // Actionable selector: real buttons, inputs with button types, anchors, and elements marked as buttons
+      const actionableSelector = 'button, input[type="button"], input[type="submit"], input[type="reset"], a[href], [role="button"], [data-button]';
+
+      // Make pseudo-buttons keyboard accessible when appropriate
+      document.querySelectorAll('[role="button"], [data-button], a.btn, a[data-button]').forEach(el => {
+        if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+        if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+      });
+
+      // Keyboard handling: activate on Enter or Space
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const target = e.target.closest(actionableSelector);
+        if (!target) return;
+        // If anchor that should navigate, let Enter act normally (only when it's a real link without button role/data-button)
+        const isAnchor = target.tagName && target.tagName.toLowerCase() === 'a';
+        const actsAsButton = target.hasAttribute('data-button') || target.getAttribute('role') === 'button' || target.classList.contains('btn');
+        if (isAnchor && !actsAsButton && e.key === 'Enter') return;
+        e.preventDefault();
+        // trigger activation
+        triggerActivation(target, e);
+      });
+
+      // Delegated click handling
+      document.addEventListener('click', (e) => {
+        const target = e.target.closest(actionableSelector);
+        if (!target) return;
+
+        // If anchor that should navigate, allow default; otherwise prevent default when it acts as a button
+        const isAnchor = target.tagName && target.tagName.toLowerCase() === 'a';
+        const actsAsButton = target.hasAttribute('data-button') || target.getAttribute('role') === 'button' || target.classList.contains('btn');
+        if (isAnchor && actsAsButton) e.preventDefault();
+
+        triggerActivation(target, e);
+      });
+
+      function triggerActivation(target, originalEvent) {
+        // ignore disabled controls
+        if (target.hasAttribute('disabled') || target.getAttribute('aria-disabled') === 'true') return;
+
+        // visual feedback
+        target.classList.add('pressed');
+        setTimeout(() => target.classList.remove('pressed'), 130);
+
+        // infer action
+        const action = target.getAttribute && (target.getAttribute('data-action') || target.getAttribute('name') || target.getAttribute('aria-label') || target.textContent.trim());
+        const detail = { action: action || 'clicked', source: target, originalEvent };
+
+        // emit a document-level event consumers can listen to
+        document.dispatchEvent(new CustomEvent('button-action', { detail }));
+
+        // also call native click for elements that expect it (keeps built-in behavior)
+        if (typeof target.click === 'function' && originalEvent.type !== 'click') {
+          try { target.click(); } catch (err) { /* ignore */ }
+        }
+
+        // basic logging for easier debugging (remove if not wanted)
+        console.log('button-action', detail);
+      }
+    });
+    </script>
   </body>
 </html>
+

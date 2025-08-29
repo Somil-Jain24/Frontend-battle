@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Cpu, Database, Cloud, Shield, Zap, Globe, ArrowRight, Play } from 'lucide-react';
+import { Cpu, Database, Cloud, Shield, Zap, Globe, ArrowRight } from 'lucide-react';
 
 interface FeaturesPageProps {
   setCursorHover: (hover: boolean) => void;
@@ -11,7 +11,7 @@ const FeaturesPage: React.FC<FeaturesPageProps> = ({ setCursorHover }) => {
   const heroRef = useRef(null);
   const featuresRef = useRef(null);
   const detailsRef = useRef(null);
-  
+
   const heroInView = useInView(heroRef, { once: true });
   const featuresInView = useInView(featuresRef, { once: true });
   const detailsInView = useInView(detailsRef, { once: true });
@@ -208,35 +208,20 @@ const FeaturesPage: React.FC<FeaturesPageProps> = ({ setCursorHover }) => {
               </div>
             </div>
 
-            <motion.div
-              className="relative"
-              whileHover={{ scale: 1.02 }}
-            >
-              <div className="aspect-video bg-gradient-to-br from-dark-800/50 to-charcoal/30 rounded-2xl backdrop-blur-sm border border-electric/30 flex items-center justify-center relative overflow-hidden">
-                <motion.div
-                  className={`absolute inset-0 bg-gradient-to-br ${featureCategories[activeTab].color} opacity-10`}
-                  animate={{ 
-                    background: [
-                      `linear-gradient(45deg, transparent, ${featureCategories[activeTab].color.split(' ')[1]})`,
-                      `linear-gradient(225deg, transparent, ${featureCategories[activeTab].color.split(' ')[1]})`,
-                      `linear-gradient(45deg, transparent, ${featureCategories[activeTab].color.split(' ')[1]})`
-                    ]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity }}
+            <motion.div className="relative" whileHover={{ scale: 1.02 }}>
+              <div className="aspect-video rounded-2xl overflow-hidden border border-electric/30 bg-gradient-to-br from-dark-800/40 to-charcoal/20">
+                {/* Replace video placeholder with a representative image and CTA */}
+                <img
+                  src={detailedFeatures[activeTab]?.image || 'https://images.pexels.com/photos/2599244/pexels-photo-2599244.jpeg?auto=compress&cs=tinysrgb&w=1200'}
+                  alt={featureCategories[activeTab].title + ' preview'}
+                  className="w-full h-full object-cover"
                 />
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="w-32 h-32 border-4 border-electric border-t-transparent rounded-full"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.button
-                    className="w-16 h-16 bg-electric/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-electric/30 transition-all duration-300"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Play className="text-electric ml-1" size={24} />
-                  </motion.button>
+                <div className="absolute bottom-6 left-6 bg-navy/60 backdrop-blur-md rounded-lg px-5 py-3 flex items-center gap-4">
+                  <div>
+                    <h4 className="text-lg font-semibold text-white">{featureCategories[activeTab].title} Preview</h4>
+                    <p className="text-sm text-gray-300">Explore key capabilities and see how they power your solutions.</p>
+                  </div>
+                  <button className="px-4 py-2 bg-electric text-navy font-semibold rounded-full hover:brightness-105 transition">Learn More</button>
                 </div>
               </div>
             </motion.div>

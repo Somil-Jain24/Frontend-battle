@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { ArrowRight, Zap, Shield, Rocket, Globe, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface HomePageProps {
   setCursorHover: (hover: boolean) => void;
@@ -18,6 +19,8 @@ const HomePage: React.FC<HomePageProps> = ({ setCursorHover }) => {
   const heroInView = useInView(heroRef, { once: true });
   const featuresInView = useInView(featuresRef, { once: true });
   const ctaInView = useInView(ctaRef, { once: true });
+
+  const navigate = useNavigate();
 
   const features = [
     {
@@ -114,6 +117,7 @@ const HomePage: React.FC<HomePageProps> = ({ setCursorHover }) => {
               whileTap={{ scale: 0.95 }}
               onMouseEnter={() => setCursorHover(true)}
               onMouseLeave={() => setCursorHover(false)}
+              onClick={() => navigate('/features')}
             >
               Get Started
               <motion.div
@@ -124,15 +128,7 @@ const HomePage: React.FC<HomePageProps> = ({ setCursorHover }) => {
               </motion.div>
             </motion.button>
 
-            <motion.button
-              className="group px-8 py-4 border-2 border-gold text-gold font-semibold rounded-full hover:bg-gold hover:text-navy transition-all duration-300"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              onMouseEnter={() => setCursorHover(true)}
-              onMouseLeave={() => setCursorHover(false)}
-            >
-              Watch Demo
-            </motion.button>
+            {/* Watch Demo removed per request */}
           </motion.div>
         </div>
 
@@ -237,6 +233,7 @@ const HomePage: React.FC<HomePageProps> = ({ setCursorHover }) => {
               whileTap={{ scale: 0.95 }}
               onMouseEnter={() => setCursorHover(true)}
               onMouseLeave={() => setCursorHover(false)}
+              onClick={() => navigate('/contact')}
             >
               <motion.span
                 className="flex items-center gap-3"
